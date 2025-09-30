@@ -1,42 +1,40 @@
 let listaProcedimentos = {
   "nail_designer": [
-    "Alongamento em gel",
-    "Blindagem de unhas",
-    "Banho de gel",
-    "Nail art",
-    "Manutenção de alongamento"
+    { "procedimento": "Alongamento em gel", "valor": 100 },
+    { "procedimento": "Blindagem de unhas", "valor": 50 },
+    { "procedimento": "Banho de gel", "valor": 70 },
+    { "procedimento": "Nail art", "valor": 40 },
+    { "procedimento": "Manutenção de alongamento", "valor": 60 }
   ],
 
   "lash_designer": [
-    "Extensão de cílios fio a fio",
-    "Extensão de cílios volume russo",
-    "Extensão de cílios híbrido",
-    "Lash lift",
-    "Design de sobrancelhas",
-    "Henna para sobrancelhas",
-    "Brow lamination"
+    {"procedimento":"Extensão de cílios fio a fio", "valor": 150},
+    {"procedimento":"Extensão de cílios volume russo"," valor": 200},
+    {"procedimento":"Extensão de cílios híbrido", "valor": 180},
+    {"procedimento":"Lash lift","valor": 120},
+    {"procedimento":"Design de sobrancelhas", "valor": 80},
+    {"procedimento":"Henna para sobrancelhas","valor": 90},
+    {"procedimento":"Brow lamination", "valor": 110}
   ],
   "cabeleireira": [
-    "Escova simples/modelada",
-    "Hidratação capilar",
-    "Nutrição capilar",
-    "Reconstrução capilar",
-    "Coloração",
-    "Mechas/luzes",
-    "Progressiva",
-    "Botox capilar",
-    "Penteados",
-    "Tratamentos capilares"
+    {"procedimento":"Escova simples/modelada","valor": 80},
+    {"procedimento":"Hidratação capilar","valor": 100},
+    {"procedimento":"Nutrição capilar", "valor": 120},
+    {"procedimento":"Reconstrução capilar", "valor": 150},
+    {"procedimento":"Coloração", "valor": 200},
+    {"procedimento":"Mechas/luzes", "valor": 250},
+    {"procedimento":"Progressiva", "valor": 300},
+    {"procedimento":"Botox capilar", "valor": 220},
+    {"procedimento":"Penteados", "valor": 180},
+    {"procedimento":"Tratamentos capilares", "valor": 130}
   ],  
   "manicure": [
-    "Fazer as unhas das mãos (corte, lixamento e polimento)",
-    "Cuticulagem (retirada ou tratamento das cutículas)",
-    "Esmaltação simples",
-    "Esmaltação decorada (nail art básica)",
-    "Francesinha"
+    {"procedimento":"Unhas das mãos", "valor": 50},
+    {"procedimento":"Cuticulagem ","valor": 30},
+    {"procedimento":"Esmaltação simples", "valor": 20},
+    {"procedimento":"Esmaltação decorada", "valor": 40},
+    {"procedimento":"Francesinha","valor": 35}
   ]
-
-
 }
 
 
