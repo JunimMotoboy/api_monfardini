@@ -34,8 +34,8 @@ app.get("/procedimentos", async (req, res)=>{
     res.json(result.rows)
 })
 
-app.get("/procedimentos/:id", async (req, res)=>{
-    const result = await pool.query("SELECT * FROM procedimentos WHERE id = $1", [req.params.id])
+app.get("/procedimentos/:cargo", async (req, res)=>{
+    const result = await pool.query("SELECT * FROM procedimentos WHERE cargo= $1", [req.params.cargo])
     res.json(result.rows)
 })
 
