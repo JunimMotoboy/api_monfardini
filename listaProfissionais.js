@@ -27,7 +27,16 @@ let listaProcedimentos = {
     "Botox capilar",
     "Penteados",
     "Tratamentos capilares"
+  ],  
+  "manicure": [
+    "Fazer as unhas das mãos (corte, lixamento e polimento)",
+    "Cuticulagem (retirada ou tratamento das cutículas)",
+    "Esmaltação simples",
+    "Esmaltação decorada (nail art básica)",
+    "Francesinha"
   ]
+
+
 }
 
 
@@ -43,5 +52,10 @@ const funcionarios = [
   {
     name: "Isabel",
     cargo: "lash_designer",
+  },
+  {
+    name: "Karen",
+    cargo: "manicure",
   }
+
 ]

@@ -7,7 +7,7 @@ const { Pool } = require("pg");
 
 const app = express();
 
-app.use(express.json()); // permite receber JSON no body
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.listen(8000, () => {
@@ -16,13 +16,11 @@ app.listen(8000, () => {
 
 const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: false, // desativa SSL para evitar erro de certificado autoassinado
+  ssl: false, 
 });
 
 
-// app.get("/profissionais", async (req, res) => {
-//   res.json(listaProfissionais);
-// });
+
 
 app.get("/funcionarios", async (req, res)=>{
     const result = await pool.query("SELECT * FROM funcionarios")
