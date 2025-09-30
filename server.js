@@ -34,12 +34,16 @@ app.get("/procedimentos", async (req, res)=>{
     res.json(result.rows)
 })
 
+app.get("/procedimentos/:id", async (req, res)=>{
+    const result = await pool.query("SELECT * FROM procedimentos WHERE id = $1", [req.params.id])
+    res.json(result.rows)
+})
+
 app.post("/procedimentos", async (req, res)=>{
     const {procedimento, cargo} = req.body
     const result = await pool.query("INSERT INTO procedimentos (procedimento, cargo) VALUES ($1, $2) RETURNING *", [procedimento, cargo])
     res.json(result.rows[0])
 })
-
 
 
 
