@@ -19,13 +19,21 @@ const pool = new Pool({
   ssl: false, 
 });
 
-
-
-
 app.get("/funcionarios", async (req, res)=>{
     const result = await pool.query("SELECT * FROM funcionarios")
     res.json(result.rows)
 })
+app.post("/funcionarios", async (req, res)=>{
+    const {name, cargo} = req.body
+    const result = await pool.query("INSERT INTO funcionarios (name, cargo) VALUES ($1, $2) RETURNING *", [name, cargo])
+    res.json(result.rows[0])
+})
+
+app.get("/servicos", async (req, res)=>{
+    const result = await pool.query("SELECT * FROM servicos")
+    res.json(result.rows)
+})
+
 
 
 
