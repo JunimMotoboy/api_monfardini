@@ -45,6 +45,22 @@ app.post("/procedimentos", async (req, res)=>{
     res.json(result.rows[0])
 })
 
+app.post("/horarios", async (req, res)=>{
+    const {data, hora, funcionario_id} = req.body
+    const result = await pool.query("INSERT INTO horarios (data, hora, funcionario_id) VALUES ($1, $2, $3) RETURNING *", [data, hora, funcionario_id])
+    res.json(result.rows[0])
+})
+
+app.get("/horarios", async (req, res)=>{
+    const result = await pool.query("SELECT * FROM horarios")
+    res.json(result.rows)
+})
+
+app.get("/horarios/:funcionario_id", async (req, res)=>{
+    const result = await pool.query("SELECT * FROM horarios WHERE funcionario_id = $1", [req.params.funcionario_id])
+    res.json(result.rows)
+})
+
 
 
 
