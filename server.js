@@ -61,6 +61,18 @@ app.get("/horarios/:funcionario_id", async (req, res)=>{
     res.json(result.rows)
 })
 
+app.post("/horario_marcado", async(req, res)=>{
+    const {horario, data, name_funcionario, id_cliente, nome_cliente, valor, procedimento} = req.body
+    const result = await pool.query("INSERT INTO horarios_marcados (horario, data, name_funcionario, id_cliente, nome_cliente, valor, procedimento) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [horario, data, name_funcionario, id_cliente, nome_cliente, valor, procedimento])
+    res.send('Horário marcado com sucesso!')
+
+})
+app.get("/horario_marcado", async (req, res)=>{
+    const result = await pool.query("SELECT * FROM horarios_marcados")
+    res.json(result.rows)
+})
+
+
 
 
 
