@@ -63,8 +63,8 @@ app.get("/horarios/:funcionario_id", async (req, res)=>{
 
 app.post("/horario_marcado", async(req, res)=>{
     console.log(req.body)
-    const {horario, data, nome_funcionario, id_cliente, nome_cliente, valor, procedimento, telefone_cliente} = req.body
-    const result = await pool.query("INSERT INTO horarios_marcados (horario, data, nome_funcionario, id_cliente, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *", [horario, data, nome_funcionario, id_cliente, nome_cliente, valor, procedimento, telefone_cliente])
+    const {horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente} = req.body
+    const result = await pool.query("INSERT INTO horarios_marcados (horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente])
     res.send('Horário marcado com sucesso!')
 
 })
