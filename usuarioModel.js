@@ -10,10 +10,10 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 })
 
-async function criarUsuario({ nome, email, senha, telefone }) {
+async function criarUsuario({ nome, email, senha }) {
 
-  if (!nome || !email || !senha || !telefone) {
-    throw new Error('Nome, email, senha e telefone são obrigatórios.')
+  if (!nome || !email || !senha ) {
+    throw new Error('Nome, email e senha  são obrigatórios.')
   }
   
   const existe = await pool.query('SELECT id FROM usuarios WHERE email = $1', [
@@ -24,8 +24,8 @@ async function criarUsuario({ nome, email, senha, telefone }) {
   }
 
   const result = await pool.query(
-    'INSERT INTO usuarios (nome, email, senha, telefone) VALUES ($1, $2, $3, $4) RETURNING id, nome, email, telefone',
-    [nome, email, senha, telefone]
+    'INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3) RETURNING id, nome, email',
+    [nome, email, senha]
   )
   return result.rows[0]
 }
