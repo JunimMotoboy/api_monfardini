@@ -142,14 +142,14 @@ app.put('/horario_marcado/:id', async (req, res) => {
 app.post('/usuarios', async (req, res) => {
   try {
     const { nome, email, senha, telefone } = req.body
-    const usuario = await criarUsuario({ nome, email, senha, telefone })
+    const usuario = await criarUsuario({ nome, email, senha })
     res.status(201).json(usuario)
   } catch (error) {
     res.status(400).json({ erro: error.message })
   }
 })
 app.get('/usuarios', async (req, res) => {
-  const result = await pool.query('SELECT id, nome, email, telefone FROM usuarios')
+  const result = await pool.query('SELECT id, nome, email FROM usuarios')
   res.json(result.rows)
 })
 app.delete('/usuarios/:id', async (req, res) => {
@@ -160,9 +160,9 @@ app.delete('/usuarios/:id', async (req, res) => {
 }
 )
 app.put('/usuarios/:id', async (req, res) => {
-  const { nome, email, senha, telefone } = req.body
+  const { nome, email, senha } = req.body
   const result = await pool.query(
-    'UPDATE usuarios SET nome = $1, email = $2, senha = $3, telefone = $4 WHERE id = $5 RETURNING id, nome, email, telefone',
+    'UPDATE usuarios SET nome = $1, email = $2, senha = $3 = $4 WHERE id = $5 RETURNING id, nome, email',
     [nome, email, senha, telefone, req.params.id]
   )
   res.json(result.rows[0])
