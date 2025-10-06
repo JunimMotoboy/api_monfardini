@@ -72,6 +72,15 @@ app.get("/horario_marcado", async (req, res)=>{
     const result = await pool.query("SELECT * FROM horarios_marcados")
     res.json(result.rows)
 })
+app.delete("/horario_marcado/:id", async (req, res)=>{
+    const result = await pool.query("DELETE FROM horarios_marcados WHERE id = $1", [req.params.id])
+    res.send("Horário cancelado com sucesso!")
+})
+app.put("/horario_marcado/:id", async (req, res)=>{
+    const {horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente} = req.body
+    const result = await pool.query("UPDATE horarios_marcados SET horario = $1, data = $2, nome_funcionario = $3, nome_cliente = $4, valor = $5, procedimento = $6, telefone_cliente = $7 WHERE id = $8 RETURNING *", [horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente, req.params.id])    
+    res.json(result.rows[0])
+})
 
 
 
