@@ -141,7 +141,7 @@ app.put('/horario_marcado/:id', async (req, res) => {
 
 app.post('/usuarios', async (req, res) => {
   try {
-    const { nome, email, senha, telefone } = req.body
+    const { nome, email, senha } = req.body
     const usuario = await criarUsuario({ nome, email, senha })
     res.status(201).json(usuario)
   } catch (error) {
