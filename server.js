@@ -163,7 +163,7 @@ app.put('/usuarios/:id', async (req, res) => {
   const { nome, email, senha } = req.body
   const result = await pool.query(
     'UPDATE usuarios SET nome = $1, email = $2, senha = $3 = $4 WHERE id = $5 RETURNING id, nome, email',
-    [nome, email, senha, telefone, req.params.id]
+    [nome, email, senha, req.params.id]
   )
   res.json(result.rows[0])
 })  
