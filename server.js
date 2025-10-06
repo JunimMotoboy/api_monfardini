@@ -139,7 +139,6 @@ app.put('/horario_marcado/:id', async (req, res) => {
   res.json(result.rows[0])
 })
 
-// Rota para criar usuário
 app.post('/usuarios', async (req, res) => {
   try {
     const { nome, email, senha, telefone } = req.body
@@ -149,3 +148,24 @@ app.post('/usuarios', async (req, res) => {
     res.status(400).json({ erro: error.message })
   }
 })
+app.get('/usuarios', async (req, res) => {
+  const result = await pool.query('SELECT id, nome, email, telefone FROM usuarios')
+  res.json(result.rows)
+})
+app.delete('/usuarios/:id', async (req, res) => {
+  const result = await pool.query('DELETE FROM usuarios WHERE id = $1', [
+    req.params.id,
+  ])
+  res.send('Usuário deletado com sucesso!')
+}
+)
+app.put('/usuarios/:id', async (req, res) => {
+  const { nome, email, senha, telefone } = req.body
+  const result = await pool.query(
+    'UPDATE usuarios SET nome = $1, email = $2, senha = $3, telefone = $4 WHERE id = $5 RETURNING id, nome, email, telefone',
+    [nome, email, senha, telefone, req.params.id]
+  )
+  res.json(result.rows[0])
+})  
+
+
