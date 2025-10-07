@@ -78,7 +78,6 @@ app.get('/horarios/:funcionario_id', async (req, res) => {
 })
 
 app.post('/horario_marcado', async (req, res) => {
-  console.log(req.body)
   const {
     horario,
     data,
@@ -87,10 +86,19 @@ app.post('/horario_marcado', async (req, res) => {
     valor,
     procedimento,
     telefone_cliente,
+    funcionario_id,
   } = req.body
+
+  if (!nome_cliente || !funcionario_id) {
+    return res
+      .status(400)
+      .json({ erro: 'nome_cliente e funcionario_id são obrigatórios.' })
+  }
+
   const result = await pool.query(
-    'INSERT INTO horarios_marcados (horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+    'INSERT INTO horarios_marcados (funcionario_id, horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
     [
+      funcionario_id,
       horario,
       data,
       nome_funcionario,
