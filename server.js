@@ -198,3 +198,45 @@ app.get('/funcionarios/:id/imagem', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar imagem.' })
   }
 })
+// Rota para salvar agendamento vinculado ao funcionário
+app.post('/agendamentos/funcionario/:id', async (req, res) => {
+  try {
+    const funcionario_id = req.params.id
+    const {
+      horario,
+      data,
+      nome_cliente,
+      valor,
+      procedimento,
+      telefone_cliente,
+    } = req.body
+    const result = await pool.query(
+      'INSERT INTO horarios_marcados (funcionario_id, horario, data, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [
+        funcionario_id,
+        horario,
+        data,
+        nome_cliente,
+        valor,
+        procedimento,
+        telefone_cliente,
+      ]
+    )
+    res.status(201).json(result.rows[0])
+  } catch (error) {
+    res.status(400).json({ erro: 'Erro ao salvar agendamento.' })
+  }
+})
+// Rota para listar agendamentos de um funcionário
+app.get('/agendamentos/funcionario/:id', async (req, res) => {
+  try {
+    const funcionario_id = req.params.id
+    const result = await pool.query(
+      'SELECT * FROM horarios_marcados WHERE funcionario_id = $1',
+      [funcionario_id]
+    )
+    res.json(result.rows)
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao buscar agendamentos.' })
+  }
+})
