@@ -156,7 +156,7 @@ app.post('/usuarios', async (req, res) => {
 });
 
 app.get('/usuarios', async (req, res) => {
-  const result = await pool.query('SELECT email, senha FROM usuarios')
+  const result = await pool.query('SELECT nome, email, senha FROM usuarios')
   res.json(result.rows)
 })
 app.delete('/usuarios/:id', async (req, res) => {
