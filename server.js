@@ -141,17 +141,14 @@ app.put('/horario_marcado/:id', async (req, res) => {
 
 app.post('/usuarios', async (req, res) => {
   try {
-    const { nome, email, senha, telefone } = req.body;
+    const { nome, email, senha } = req.body;
     // Verifica se já existe usuário com o mesmo e-mail
     const existe = await pool.query('SELECT id FROM usuarios WHERE email = $1', [email]);
     if (existe.rows.length > 0) {
       return res.status(400).json({ erro: 'Usuário já existe com este e-mail.' });
     }
     // Cria o usuário se não existir
-    const result = await pool.query(
-      'INSERT INTO usuarios (nome, email, senha, telefone) VALUES ($1, $2, $3, $4) RETURNING *',
-      [nome, email, senha, telefone]
-    );
+    const usuario = await criarUsuario({ nome, email, senha });
     res.status(201).json(usuario);
   } catch (error) {
     res.status(400).json({ erro: error.message });
