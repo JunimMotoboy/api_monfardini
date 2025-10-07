@@ -77,7 +77,7 @@ app.get('/horarios/:funcionario_id', async (req, res) => {
   res.json(result.rows)
 })
 
-app.post('/horario_marcado/funcionario/{funcionarioId}', async (req, res) => {
+app.post('/horario_marcado', async (req, res) => {
   const {
     horario,
     data,
