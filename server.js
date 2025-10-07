@@ -141,19 +141,24 @@ app.put('/horario_marcado/:id', async (req, res) => {
 
 app.post('/usuarios', async (req, res) => {
   try {
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha } = req.body
     // Verifica se já existe usuário com o mesmo e-mail
-    const existe = await pool.query('SELECT id FROM usuarios WHERE email = $1', [email]);
+    const existe = await pool.query(
+      'SELECT id FROM usuarios WHERE email = $1',
+      [email]
+    )
     if (existe.rows.length > 0) {
-      return res.status(400).json({ erro: 'Usuário já existe com este e-mail.' });
+      return res
+        .status(400)
+        .json({ erro: 'Usuário já existe com este e-mail.' })
     }
     // Cria o usuário se não existir
-    const usuario = await criarUsuario({ nome, email, senha });
-    res.status(201).json(usuario);
+    const usuario = await criarUsuario({ nome, email, senha })
+    res.status(201).json(usuario)
   } catch (error) {
-    res.status(400).json({ erro: error.message });
+    res.status(400).json({ erro: error.message })
   }
-});
+})
 
 app.get('/usuarios', async (req, res) => {
   const result = await pool.query('SELECT email, senha FROM usuarios')
@@ -164,8 +169,7 @@ app.delete('/usuarios/:id', async (req, res) => {
     req.params.id,
   ])
   res.send('Usuário deletado com sucesso!')
-}
-)
+})
 app.put('/usuarios/:id', async (req, res) => {
   const { nome, email, senha } = req.body
   const result = await pool.query(
@@ -173,6 +177,24 @@ app.put('/usuarios/:id', async (req, res) => {
     [nome, email, senha, req.params.id]
   )
   res.json(result.rows[0])
-})  
+})
 
-
+// Rota para buscar imagem do funcionário
+app.get('/funcionarios/:id/imagem', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT img FROM funcionarios WHERE id = $1',
+      [req.params.id]
+    )
+    if (result.rows.length === 0) {
+      return res.status(404).json({ erro: 'Funcionário não encontrado.' })
+    }
+    const img = result.rows[0].img
+    if (!img) {
+      return res.status(404).json({ erro: 'Imagem não encontrada.' })
+    }
+    res.json({ img }) // Retorna a imagem (base64 ou URL)
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao buscar imagem.' })
+  }
+})
