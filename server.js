@@ -71,13 +71,14 @@ app.get('/horarios', async (req, res) => {
 
 app.get('/horarios/:funcionario_id', async (req, res) => {
   const result = await pool.query(
-    'SELECT * FROM horarios WHERE funcionario_id = $1',
+    'SELECT * FROM horarios WHERE id_funcionario = $1',
     [req.params.funcionario_id]
   )
   res.json(result.rows)
 })
 
 app.post('/horario_marcado', async (req, res) => {
+  console.log(req.body)
   const {
     horario,
     data,
@@ -86,19 +87,10 @@ app.post('/horario_marcado', async (req, res) => {
     valor,
     procedimento,
     telefone_cliente,
-    funcionario_id,
   } = req.body
-
-  if (!nome_cliente || !funcionario_id) {
-    return res
-      .status(400)
-      .json({ erro: 'nome_cliente e funcionario_id são obrigatórios.' })
-  }
-
   const result = await pool.query(
-    'INSERT INTO horarios_marcados (funcionario_id, horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+    'INSERT INTO horarios_marcados (horario, data, nome_funcionario, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
     [
-      funcionario_id,
       horario,
       data,
       nome_funcionario,
@@ -106,7 +98,6 @@ app.post('/horario_marcado', async (req, res) => {
       valor,
       procedimento,
       telefone_cliente,
-
     ]
   )
   res.send('Horário marcado com sucesso!')
@@ -150,24 +141,19 @@ app.put('/horario_marcado/:id', async (req, res) => {
 
 app.post('/usuarios', async (req, res) => {
   try {
-    const { nome, email, senha } = req.body
+    const { nome, email, senha } = req.body;
     // Verifica se já existe usuário com o mesmo e-mail
-    const existe = await pool.query(
-      'SELECT id FROM usuarios WHERE email = $1',
-      [email]
-    )
+    const existe = await pool.query('SELECT id FROM usuarios WHERE email = $1', [email]);
     if (existe.rows.length > 0) {
-      return res
-        .status(400)
-        .json({ erro: 'Usuário já existe com este e-mail.' })
+      return res.status(400).json({ erro: 'Usuário já existe com este e-mail.' });
     }
     // Cria o usuário se não existir
-    const usuario = await criarUsuario({ nome, email, senha })
-    res.status(201).json(usuario)
+    const usuario = await criarUsuario({ nome, email, senha });
+    res.status(201).json(usuario);
   } catch (error) {
-    res.status(400).json({ erro: error.message })
+    res.status(400).json({ erro: error.message });
   }
-})
+});
 
 app.get('/usuarios', async (req, res) => {
   const result = await pool.query('SELECT email, senha FROM usuarios')
@@ -178,74 +164,14 @@ app.delete('/usuarios/:id', async (req, res) => {
     req.params.id,
   ])
   res.send('Usuário deletado com sucesso!')
-})
+}
+)
 app.put('/usuarios/:id', async (req, res) => {
   const { nome, email, senha } = req.body
   const result = await pool.query(
-    'UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING id, nome, email',
+    'UPDATE usuarios SET nome = $1, email = $2, senha = $3 = $4 WHERE id = $5 RETURNING id, nome, email',
     [nome, email, senha, req.params.id]
   )
   res.json(result.rows[0])
-})
+})  
 
-// Rota para buscar imagem do funcionário
-app.get('/funcionarios/:id/imagem', async (req, res) => {
-  try {
-    const result = await pool.query(
-      'SELECT img FROM funcionarios WHERE id = $1',
-      [req.params.id]
-    )
-    if (result.rows.length === 0) {
-      return res.status(404).json({ erro: 'Funcionário não encontrado.' })
-    }
-    const img = result.rows[0].img
-    if (!img) {
-      return res.status(404).json({ erro: 'Imagem não encontrada.' })
-    }
-    res.json({ img }) // Retorna a imagem (base64 ou URL)
-  } catch (error) {
-    res.status(500).json({ erro: 'Erro ao buscar imagem.' })
-  }
-})
-// Rota para salvar agendamento vinculado ao funcionário
-app.post('/agendamentos/funcionario/:id', async (req, res) => {
-  try {
-    const funcionario_id = req.params.id
-    const {
-      horario,
-      data,
-      nome_cliente,
-      valor,
-      procedimento,
-      telefone_cliente,
-    } = req.body
-    const result = await pool.query(
-      'INSERT INTO horarios_marcados (funcionario_id, horario, data, nome_cliente, valor, procedimento, telefone_cliente) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [
-        funcionario_id,
-        horario,
-        data,
-        nome_cliente,
-        valor,
-        procedimento,
-        telefone_cliente,
-      ]
-    )
-    res.status(201).json(result.rows[0])
-  } catch (error) {
-    res.status(400).json({ erro: 'Erro ao salvar agendamento.' })
-  }
-})
-// Rota para listar agendamentos de um funcionário
-app.get('/agendamentos/funcionario/:id', async (req, res) => {
-  try {
-    const funcionario_id = req.params.id
-    const result = await pool.query(
-      'SELECT * FROM horarios_marcados WHERE funcionario_id = $1',
-      [funcionario_id]
-    )
-    res.json(result.rows)
-  } catch (error) {
-    res.status(500).json({ erro: 'Erro ao buscar agendamentos.' })
-  }
-})
